@@ -584,14 +584,17 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker
                 { "TaskName", Task.Reference.Name },
                 { "TaskId", Task.Reference.Id.ToString() },
                 { "Version", Task.Reference.Version },
-                { "OS", PlatformUtil.HostOS.ToString() },
-                { "SystemId", PlatformUtil.GetSystemId() },
-                { "SystemVersion", PlatformUtil.GetSystemVersion().ToString() },
+                { "OS", PlatformUtil.GetSystemId() ?? "" },
+                { "OSVersion", systemVersion?.Name?.ToString() ?? "" },
+                { "OSBuild", systemVersion?.Version?.ToString() ?? "" },
                 { "ExpectedExecutionHandler", expectedExecutionHandler },
                 { "RealExecutionHandler", handlerData.ToString() },
                 { "UseNode10", useNode10 },
                 { "JobId", ExecutionContext.Variables.System_JobId.ToString()},
-                { "PlanId", ExecutionContext.Variables.Get("system.planId")}
+                { "PlanId", ExecutionContext.Variables.Get(Constants.Variables.System.JobId)},
+                { "AgentName", ExecutionContext.Variables.Get(Constants.Variables.Agent.Name)},
+                { "MachineName", ExecutionContext.Variables.Get(Constants.Variables.Agent.MachineName)},
+                { "IsSelfHosted", ExecutionContext.Variables.Get(Constants.Variables.Agent.IsSelfHosted)}
             };
 
             var cmd = new Command("telemetry", "publish");
